@@ -1,10 +1,8 @@
 package com.example;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,15 +22,11 @@ public class LionParamTest {
         };
     }
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    Feline feline;
 
     @Test
     public void lionManeParamTest() throws Exception {
-
-        Lion lion = new Lion(sex);
+        Lion lion = new Lion(feline, sex);
         boolean actual = lion.doesHaveMane();
         assertEquals(doesHaveMane, actual);
     }

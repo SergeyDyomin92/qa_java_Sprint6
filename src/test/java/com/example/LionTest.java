@@ -1,6 +1,8 @@
 package com.example;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,8 +19,8 @@ public class LionTest {
     Feline feline;
 
     @Test
-    public void getLionKittensTest() {
-        Lion lion = new Lion(feline);
+    public void getLionKittensTest() throws Exception {
+        Lion lion = new Lion(feline, "Самец");
         int exceptedResult = 5;
         Mockito.when(feline.getKittens()).thenReturn(exceptedResult);
         int actualResult = lion.getKittens();
@@ -27,7 +29,7 @@ public class LionTest {
 
     @Test
     public void getLionFoodTest() throws Exception {
-        Lion lion = new Lion(feline);
+        Lion lion = new Lion(feline, "Самец");
         List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
         Mockito.when(feline.getFood("Хищник")).thenReturn(expectedFood);
         List<String> actualFood = lion.getFood();
@@ -38,21 +40,26 @@ public class LionTest {
     // Следующие два теста реализованы здесь и в LionParamTest
     @Test
     public void doesLionHaveManeTest() throws Exception {
-        Lion lion = new Lion("Самец");
+        Lion lion = new Lion(feline, "Самец");
         boolean actualResult = lion.doesHaveMane();
         assertTrue(actualResult);
     }
 
     @Test
     public void doesLionHaveNotManeTest() throws Exception {
-        Lion lion = new Lion("Самка");
+        Lion lion = new Lion(feline, "Самка");
         boolean actualResult = lion.doesHaveMane();
         assertFalse(actualResult);
     }
 
-    @Test(expected = Exception.class)
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
     public void doesLionHaveManeDefaultExceptionTest() throws Exception {
-        Lion lion = new Lion("Test");
+        thrown.expect(Exception.class);
+        thrown.expectMessage("Используйте допустимые значения пола животного - самец или самка");
+        Lion lion = new Lion(feline, "Test");
         lion.doesHaveMane();
     }
 }
